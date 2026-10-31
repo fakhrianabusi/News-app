@@ -12,18 +12,39 @@ class NewsController extends Controller
     ];
 
 
-    public function index()
+    private function allNews()
     {
-        return view('news.index', ['news' => $this->news]);
+        return session('news', $this->news);
     }
 
+    public function index()
+    {
+        return view('news.index', ['news' => $this->allNews()]);
+    }
 
     public function show(int $id)
     {
-        if (!isset($this->news[$id])) {
+        $news = $this->allNews();
+
+        if (!isset($news[$id])) {
             abort(404);
         }
 
-        return view('news.show', ['item' => $this->news[$id]]);
+        return view('news.show', ['item' => $news[$id]]);
+    }
+
+    public function create($id, $title, $content)
+    {
+        $news = $this->allNews();
+
+        if (isset($news[$id])) {
+            return "News with id $id already exists";
+        }
+
+        $news[$id] = ['title' => $title, 'content' => $content];
+
+        session(['news' => $news]);   // نحفظ المصفوفة الجديدة
+
+        return redirect('/news');
     }
 }

@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>All News</h1>
+<h1>All News</h1>
+<a href="{{ url('/news/add') }}">+ Create News</a>
 
-    @foreach ($news as $id => $item)
-        <h2><a href="{{ url('/news/' . $id) }}">{{ $item['title'] }}</a></h2>
-        <p>{{ $item['content'] }}</p>
-    @endforeach
+@foreach ($news as $id => $item)
+<h2><a href="{{ url('/news/' . $id) }}">{{ $item['title'] }}</a></h2>
+<p>{{ $item['content'] }}</p>
+@endforeach
 @endsection
