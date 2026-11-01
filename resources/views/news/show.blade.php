@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
-    <h1>{{ $item['title'] }}</h1>
-    <p>{{ $item['content'] }}</p>
+@section('title', $item['title'])
 
-    <a href="{{ url('/news') }}">Back to news</a>
+@section('content')
+<h1>{{ $item['title'] }}</h1>
+<p>{!! nl2br(e($item['content'])) !!}</p>
+
+<a href="{{ route('news.index') }}">Back to news</a>
 @endsection

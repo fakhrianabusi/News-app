@@ -8,9 +8,8 @@ class NewsController extends Controller
         1 => ['title' => 'news1', 'content' => 'fakhri'],
         2 => ['title' => 'news2', 'content' => 'content2'],
         3 => ['title' => 'news3', 'content' => 'content3'],
-        4 => ['title' => 'اخبار التاسعة', 'content' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eu orci accumsan, ultrices justo eu, iaculis nisi. Proin neque odio, vestibulum eu enim in, convallis consequat lectus. Cras placerat lobortis scelerisque. Maecenas viverra ligula vitae turpis tristique, in aliquam tellus elementum. Cras et nulla a erat elementum pulvinar. Maecenas at placerat libero. Mauris nec risus lacinia, mollis est quis, porttitor purus. Etiam placerat dui posuere neque sodales porta. Maecenas ultrices quis quam ut vehicula. Vivamus mauris odio, faucibus ut interdum vitae, commodo blandit ligula. Duis scelerisque vel velit vitae molestie."],
+        // ← أبقِ الخبر رقم 4 (اخبار التاسعة) هنا كما هو عندك
     ];
-
 
     private function allNews()
     {
@@ -33,18 +32,37 @@ class NewsController extends Controller
         return view('news.show', ['item' => $news[$id]]);
     }
 
-    public function create($id, $title, $content)
+    public function store(int $id, string $title, string $content)
     {
         $news = $this->allNews();
 
         if (isset($news[$id])) {
-            return "News with id $id already exists";
+            return redirect()->route('news.create')
+                ->with('error', "News with id $id already exists");
+        }
+
+        if (mb_strlen($title) > 255) {
+            return redirect()->route('news.create')
+                ->with('error', 'Title is too long (max 255 characters)');
         }
 
         $news[$id] = ['title' => $title, 'content' => $content];
+        session(['news' => $news]);
 
-        session(['news' => $news]);   // نحفظ المصفوفة الجديدة
+        return redirect()->route('news.index')->with('success', 'News added successfully');
+    }
 
-        return redirect('/news');
+    public function adminIndex()
+    {
+        return view('admin.news.index', ['news' => $this->allNews()]);
+    }
+
+    public function destroy(int $id)
+    {
+        $news = $this->allNews();
+        unset($news[$id]);
+        session(['news' => $news]);
+
+        return redirect()->route('admin.news.index')->with('success', 'News deleted');
     }
 }
