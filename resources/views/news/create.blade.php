@@ -31,4 +31,9 @@
         window.location.href = "{{ url('/news/create') }}/" + id + "/" + title + "/" + content;
     });
 </script>
+
+@if (session('error'))
+<p style="color:red">{{ session('error') }}</p>
+@endif
+
 @endsection

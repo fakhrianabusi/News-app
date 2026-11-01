@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Contact Us</h1>
+<form action="{{route('contact.send')}}" method="post">
+    <input type="text" name="name" placeholder="enter your name">
+    <input type="submit" value="Send">
+</form>
 @endsection

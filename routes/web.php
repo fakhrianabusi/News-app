@@ -10,7 +10,6 @@ Route::view('/contact', 'contact');
 Route::get('/news', [NewsController::class, 'index']);
 Route::get('/news/{id}', [NewsController::class, 'show'])->whereNumber('id');
 
-Route::get('/news/create/{id}/{title}/{content}', [NewsController::class, 'create'])
-    ->whereNumber('id');
-
-Route::view('/news/add', 'news.create');
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{id}', [NewsController::class, 'show'])->whereNumber('id')->name('news.show');
+Route::view('/news/add', 'news.create')->name('news.create');
